@@ -1,0 +1,364 @@
+{
+  "articles": [
+    {
+      "id": "rms-cloud-breach",
+      "source": "real",
+      "expected": "yes",
+      "input": {
+        "name": "RMS Cloud",
+        "title": "Aussie holiday park operators compromised by RMS Cloud third-party breach",
+        "sentences": [
+          "\"We are contacting you as a past guest to make you aware our third-party booking system provider, RMS Cloud, has confirmed a global incident,\" a spokesman for the NSW-based Reflections Holidays said in an email seen by Cyber Daily.",
+          "RMS Cloud – which is used by more than 6,000 holiday parks, hotels, and campgrounds around the world – began monitoring malicious activity in the last 24 hours.",
+          "The next day, RMS Cloud began issuing new credentials to its integration partners, as well as providing assistance to complete the process."
+        ]
+      }
+    },
+    {
+      "id": "sharp-motor-incident",
+      "source": "real",
+      "expected": "yes",
+      "input": {
+        "name": "Sharp Motor Group",
+        "title": "Exclusive: Sharp Motor Group confirms third-party cyber incident in wake of ransomware claims",
+        "sentences": [
+          "The hackers listed the Sharp Motor Group in a 23 August leak post, and while the hackers have not shared the volume of data they allege to have stolen, they have published several documents and files as evidence of the hack.",
+          "\"Sharp Motor Group is aware that our third-party IT provider has been involved in a cyber incident,\" a company spokesperson told Cyber Daily."
+        ]
+      }
+    },
+    {
+      "id": "calvary-incident",
+      "source": "real title, synthetic sentence",
+      "expected": "yes",
+      "input": {
+        "name": "Calvary Christian College",
+        "title": "Exclusive: Townsville's Calvary Christian College investigating cyber incident",
+        "sentences": [
+          "Calvary Christian College has confirmed it is investigating a cyber incident that affected some of its systems."
+        ]
+      }
+    },
+    {
+      "id": "northpay-dashboard-access",
+      "source": "synthetic",
+      "expected": "yes",
+      "input": {
+        "name": "Northpay",
+        "title": "Payment provider Northpay confirms unauthorised access to merchant dashboard",
+        "sentences": [
+          "Northpay said an attacker used stolen staff credentials to access its merchant dashboard for three days.",
+          "Northpay has reset all merchant passwords and notified the OAIC."
+        ]
+      }
+    },
+    {
+      "id": "trailhead-data-leak",
+      "source": "synthetic",
+      "expected": "yes",
+      "input": {
+        "name": "Trailhead Outfitters",
+        "title": "Hackers leak customer records from Trailhead Outfitters",
+        "sentences": [
+          "A hacking group has published what it says are 200,000 customer records taken from Trailhead Outfitters' online store, and the retailer has confirmed the leak."
+        ]
+      }
+    },
+    {
+      "id": "coastline-warns-guests",
+      "source": "synthetic",
+      "expected": "yes",
+      "input": {
+        "name": "Coastline Holiday Parks",
+        "title": "Coastline Holiday Parks warns guests after booking data accessed",
+        "sentences": [
+          "Coastline Holiday Parks said guest names, phone numbers and booking details were accessed by an unauthorised party through its reservations system."
+        ]
+      }
+    },
+    {
+      "id": "harbour-ransomware-claim",
+      "source": "synthetic",
+      "expected": "yes",
+      "input": {
+        "name": "Harbour Books",
+        "title": "Ransomware gang claims attack on Harbour Books",
+        "sentences": [
+          "The group added Harbour Books to its leak site on Monday and posted screenshots of what it says are internal invoices.",
+          "Harbour Books said it is investigating a cyber incident and has engaged external specialists."
+        ]
+      }
+    },
+    {
+      "id": "rms-cloud-ai-launch",
+      "source": "synthetic",
+      "expected": "no",
+      "input": {
+        "name": "RMS Cloud",
+        "title": "RMS Cloud launches AI pricing assistant for holiday parks",
+        "sentences": [
+          "RMS Cloud said the new assistant suggests nightly rates based on local events and past occupancy."
+        ]
+      }
+    },
+    {
+      "id": "rms-cloud-not-affected",
+      "source": "synthetic",
+      "expected": "no",
+      "input": {
+        "name": "RMS Cloud",
+        "title": "Hotel booking platform hit by outage after cyber attack on rival",
+        "sentences": [
+          "RMS Cloud said its systems were not affected by the attack and that no customer data was involved."
+        ]
+      }
+    },
+    {
+      "id": "reflections-via-vendor",
+      "source": "real",
+      "expected": "yes",
+      "input": {
+        "name": "Reflections Holidays",
+        "title": "Aussie holiday park operators compromised by RMS Cloud third-party breach",
+        "sentences": [
+          "\"We are contacting you as a past guest to make you aware our third-party booking system provider, RMS Cloud, has confirmed a global incident,\" a spokesman for the NSW-based Reflections Holidays said in an email seen by Cyber Daily."
+        ]
+      },
+      "note": "Affected through its booking system provider. The agent marks a company affected when the article reports a breach that affects it."
+    },
+    {
+      "id": "northpay-mentioned-as-partner",
+      "source": "synthetic",
+      "expected": "no",
+      "input": {
+        "name": "Northpay",
+        "title": "Phishing campaign targets online merchants with fake invoices",
+        "sentences": [
+          "Merchants using payment providers such as Northpay and Stripe were sent the fake invoices, although neither provider was breached."
+        ]
+      }
+    },
+    {
+      "id": "trailhead-award",
+      "source": "synthetic",
+      "expected": "no",
+      "input": {
+        "name": "Trailhead Outfitters",
+        "title": "Trailhead Outfitters named outdoor retailer of the year",
+        "sentences": [
+          "Trailhead Outfitters won the award for its repair service and its range of locally made gear."
+        ]
+      }
+    },
+    {
+      "id": "coastline-cto-hire",
+      "source": "synthetic",
+      "expected": "no",
+      "input": {
+        "name": "Coastline Holiday Parks",
+        "title": "Security firm appoints former Coastline Holiday Parks technology chief",
+        "sentences": [
+          "Before joining the firm, she led technology at Coastline Holiday Parks for six years."
+        ]
+      }
+    },
+    {
+      "id": "crowdstrike-acquisition",
+      "source": "real title, synthetic sentence",
+      "expected": "no",
+      "input": {
+        "name": "CrowdStrike",
+        "title": "CrowdStrike to acquire Fiddler AI and Dreadnode in push to secure enterprise AI",
+        "sentences": [
+          "CrowdStrike said the acquisitions will help customers secure the AI models they run in production."
+        ]
+      }
+    },
+    {
+      "id": "harbour-impersonation-scam",
+      "source": "synthetic",
+      "expected": "no",
+      "input": {
+        "name": "Harbour Books",
+        "title": "Scam emails impersonate local bookshops",
+        "sentences": [
+          "Harbour Books warned customers that scammers are sending emails that copy its branding, and said its own systems have not been compromised."
+        ]
+      }
+    },
+    {
+      "id": "microsoft-patch-tuesday",
+      "source": "real title, synthetic sentence",
+      "expected": "no",
+      "input": {
+        "name": "Microsoft",
+        "title": "Op-Ed: Microsoft November Patch Tuesday reveals 1,092 vulnerabilities",
+        "sentences": [
+          "Microsoft released fixes for 1,092 vulnerabilities across Windows, Office and Azure in its November update."
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "id": "fake-coastline-copy",
+      "expected": "yes",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "coastline-payments.localhost",
+        "title": "Payment required – Coastline Holiday Parks",
+        "text": "Coastline Holiday Parks. Your booking payment has failed. Update your payment details within 24 hours or your reservation will be cancelled. Booking reference CHP-48213. Ballina Beachfront Cabin, Ballina NSW. 12–15 December 2026. Amount due $486.00. Name on card. Card number. Expiry. CVC. Confirm payment."
+      }
+    },
+    {
+      "id": "fake-coastal-variant",
+      "expected": "yes",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "coastal-parks-pay.com",
+        "title": "Coastal Parks & Resorts – Secure payment",
+        "text": "Coastal Parks & Resorts. We could not process the payment for your Ballina Beachfront Cabin stay, 12–15 December. Re-enter your card to keep your reservation. Card number. Expiry. CVC. Pay $486.00."
+      }
+    },
+    {
+      "id": "fake-homoglyph",
+      "expected": "yes",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "c0astline-holidayparks.help",
+        "title": "C0astline Holiday Parks – Verify your booking",
+        "text": "C0astline Holiday Parks. Verify your card to confirm your booking. Your reservation will be released if not verified today. Name on card. Card number. Expiry. CVC. Verify card."
+      }
+    },
+    {
+      "id": "fake-booking-system-portal",
+      "expected": "yes",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "guest-payments-rms.com",
+        "title": "Guest payment portal – Coastline Holiday Parks",
+        "text": "Coastline Holiday Parks guest payment portal. Your holiday park has asked us to collect the outstanding balance for booking CHP-48213 before arrival. Card number. Expiry. CVC. Pay balance."
+      }
+    },
+    {
+      "id": "fake-coastline-hold",
+      "expected": "yes",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "coastline-booking.info",
+        "title": "Your stay is on hold",
+        "text": "Coastline Holiday Parks. Your stay is on hold. Confirm your card details to keep your reservation at our Ballina park. Card number. Expiry. CVC. Confirm."
+      }
+    },
+    {
+      "id": "fake-trailhead-order",
+      "expected": "yes",
+      "input": {
+        "company": "Trailhead Outfitters",
+        "domain": "trailhead-orders.shop",
+        "title": "Trailhead Outfitters – Verify your order",
+        "text": "Trailhead Outfitters. Your recent order could not be shipped. Verify your payment card to release order TH-20931. Card number. Expiry. CVC. Verify."
+      }
+    },
+    {
+      "id": "fake-harbour-order",
+      "expected": "yes",
+      "input": {
+        "company": "Harbour Books",
+        "domain": "harbourbooks-au.store",
+        "title": "Harbour Books – Complete your order",
+        "text": "Harbour Books. Complete your order. Your card was declined. Please enter your card again. Card number. Expiry. CVC. Pay $32.99."
+      }
+    },
+    {
+      "id": "fake-northpay-merchant",
+      "expected": "yes",
+      "input": {
+        "company": "Trailhead Outfitters",
+        "domain": "trailheadoutfitters-payment.com",
+        "title": "Payment – Trailhead Outfitters",
+        "text": "Trailhead Outfitters checkout. Secured by Northpay. Order total $89.00. Name on card. Card number. Expiry. CVC. Pay now."
+      }
+    },
+    {
+      "id": "staysearch-agent",
+      "expected": "no",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "staysearch.localhost",
+        "title": "Checkout – StaySearch",
+        "text": "StaySearch. Checkout. Stay: Coastline Holiday Parks – Ballina Beachfront Cabin, 18–20 January 2027 (2 nights). Total $324.00. StaySearch is a booking agent. Your stay is provided by Coastline Holiday Parks, and StaySearch takes the payment. Card number. Expiry. CVC. Pay $324.00."
+      }
+    },
+    {
+      "id": "comparison-site",
+      "expected": "no",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "staycompare.com.au",
+        "title": "Book with StayCompare",
+        "text": "StayCompare. You are booking Coastline Holiday Parks, Yamba Riverside Villa, through StayCompare. Payment is taken by StayCompare Pty Ltd. Card number. Expiry. CVC. Pay StayCompare $378.00."
+      }
+    },
+    {
+      "id": "marketplace-trailhead",
+      "expected": "no",
+      "input": {
+        "company": "Trailhead Outfitters",
+        "domain": "wanderly.com.au",
+        "title": "Wanderly checkout",
+        "text": "Wanderly. Your basket: Trail Daypack 28L by Trailhead Outfitters, sold and shipped by Wanderly. Total $92.00. Card number. Expiry. CVC. Place order."
+      }
+    },
+    {
+      "id": "gift-card-reseller",
+      "expected": "no",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "gifthub.com.au",
+        "title": "GiftHub – Checkout",
+        "text": "GiftHub. Coastline Holiday Parks e-gift card, $100. Gift cards are sold by GiftHub and redeemable at participating parks. Card number. Expiry. CVC. Buy gift card."
+      }
+    },
+    {
+      "id": "review-site-booking",
+      "expected": "no",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "tripnotes.com",
+        "title": "Coastline Holiday Parks reviews and booking – TripNotes",
+        "text": "TripNotes. Coastline Holiday Parks, Ballina: rated 4.6 by 812 travellers. Book on TripNotes and pay TripNotes now. Card number. Expiry. CVC. Book with TripNotes."
+      }
+    },
+    {
+      "id": "festival-partner",
+      "expected": "no",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "ballinasurffestival.com.au",
+        "title": "Tickets – Ballina Surf Festival",
+        "text": "Ballina Surf Festival 2027. Weekend pass $149. Accommodation partner: Coastline Holiday Parks offers 10% off for ticket holders. Card number. Expiry. CVC. Buy tickets."
+      }
+    },
+    {
+      "id": "bookshop-marketplace",
+      "expected": "no",
+      "input": {
+        "company": "Harbour Books",
+        "domain": "booknook.com.au",
+        "title": "BookNook – Checkout",
+        "text": "BookNook marketplace. Tides of the Coral Coast, sold by Harbour Books via BookNook. BookNook processes your payment. Card number. Expiry. CVC. Pay $34.99."
+      }
+    },
+    {
+      "id": "holiday-agent",
+      "expected": "no",
+      "input": {
+        "company": "Coastline Holiday Parks",
+        "domain": "holidayhop.com.au",
+        "title": "HolidayHop – Pay for your trip",
+        "text": "HolidayHop. Trip summary: Coastline Holiday Parks Ballina, 3 nights, plus airport transfer. Pay HolidayHop today and we will confirm your booking with the park. Card number. Expiry. CVC. Pay $512.00."
+      }
+    }
+  ]
+}

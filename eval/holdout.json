@@ -1,0 +1,417 @@
+{
+  "note": "Held-out page cases. Written after the prompt was tuned and never used to tune it. Industries and wording differ from cases.json.",
+  "pages": [
+    {
+      "id": "courier-redelivery",
+      "expected": "yes",
+      "input": {
+        "company": "QuickShip Couriers",
+        "domain": "quickship-redelivery.com",
+        "title": "Redelivery fee",
+        "text": "QuickShip Couriers. Your parcel could not be delivered because of an incomplete address. Pay the $2.95 redelivery fee within 48 hours or the parcel will be returned. Card number. Expiry. CVC. Pay $2.95."
+      }
+    },
+    {
+      "id": "energy-disconnection",
+      "expected": "yes",
+      "input": {
+        "company": "Metro Power",
+        "domain": "metropower-billing.net",
+        "title": "Overdue account – Metro Power",
+        "text": "Metro Power. Your electricity account is overdue. Pay $212.40 today to avoid disconnection. Card number. Expiry. CVC. Pay now."
+      }
+    },
+    {
+      "id": "airline-upgrade",
+      "expected": "yes",
+      "input": {
+        "company": "Sunset Airlines",
+        "domain": "sunsetair-upgrades.com",
+        "title": "Seat upgrade",
+        "text": "Sunset Airlines. Complete payment for your seat upgrade on booking SA7Q2K, Brisbane to Cairns. Card number. Expiry. CVC. Pay $65.00."
+      }
+    },
+    {
+      "id": "streaming-on-hold",
+      "expected": "yes",
+      "input": {
+        "company": "BrightStream",
+        "domain": "brightstream-account.help",
+        "title": "Membership on hold",
+        "text": "BrightStream. Your membership is on hold because your last payment was declined. Update your payment method to keep watching. Card number. Expiry. CVC. Update."
+      }
+    },
+    {
+      "id": "hotel-deposit",
+      "expected": "yes",
+      "input": {
+        "company": "Ocean View Hotel",
+        "domain": "oceanview-hotel-deposit.com",
+        "title": "Reservation deposit",
+        "text": "Ocean View Hotel. Confirm the $120 deposit for your stay on 3–5 March, or your reservation will be released. Card number. Expiry. CVC. Pay deposit."
+      }
+    },
+    {
+      "id": "insurance-renewal",
+      "expected": "yes",
+      "input": {
+        "company": "Summit Insurance",
+        "domain": "summit-insure-renew.com",
+        "title": "Policy renewal",
+        "text": "Summit Insurance. The renewal payment for your car insurance policy failed. Pay now so your cover does not lapse. Card number. Expiry. CVC. Renew policy."
+      }
+    },
+    {
+      "id": "ferry-topup",
+      "expected": "yes",
+      "input": {
+        "company": "Harbour Ferries",
+        "domain": "harbourferries-topup.com",
+        "title": "Top up your travel card",
+        "text": "Harbour Ferries. Top up your ferry travel card. Your balance is low. Card number. Expiry. CVC. Top up $50."
+      }
+    },
+    {
+      "id": "water-final-notice",
+      "expected": "yes",
+      "input": {
+        "company": "City Water",
+        "domain": "citywater-pay.info",
+        "title": "Final notice",
+        "text": "City Water. Final notice: your water bill of $184.20 is unpaid. Pay today to avoid a late fee. Card number. Expiry. CVC. Pay bill."
+      }
+    },
+    {
+      "id": "vet-invoice",
+      "expected": "yes",
+      "input": {
+        "company": "PetPal Vet",
+        "domain": "petpal-invoices.com",
+        "title": "Invoice INV-2201",
+        "text": "PetPal Vet Clinic. Please pay the remaining balance for Max's surgery, invoice INV-2201. Card number. Expiry. CVC. Pay $340.00."
+      }
+    },
+    {
+      "id": "gym-homoglyph",
+      "expected": "yes",
+      "input": {
+        "company": "Northside Gym",
+        "domain": "n0rthsidegym.com",
+        "title": "N0rthside Gym – payment failed",
+        "text": "N0rthside Gym. Your monthly membership payment failed. Re-enter your card to keep your access. Card number. Expiry. CVC. Pay $59.00."
+      }
+    },
+    {
+      "id": "electronics-hyphenated",
+      "expected": "yes",
+      "input": {
+        "company": "TechZone",
+        "domain": "tech-zone-orders.com",
+        "title": "Tech-Zone order",
+        "text": "Tech-Zone. Confirm your card to release your laptop order TZ-88310. Card number. Expiry. CVC. Confirm."
+      }
+    },
+    {
+      "id": "grocer-delivery-slot",
+      "expected": "yes",
+      "input": {
+        "company": "GreenLeaf Grocer",
+        "domain": "greenleaf-grocer-pay.com",
+        "title": "Delivery slot",
+        "text": "GreenLeaf Grocer. The payment for your Saturday delivery slot failed. Pay again to keep your order. Card number. Expiry. CVC. Pay $9.00."
+      }
+    },
+    {
+      "id": "tour-balance",
+      "expected": "yes",
+      "input": {
+        "company": "Coral Coast Tours",
+        "domain": "coralcoast-tours-balance.com",
+        "title": "Balance due",
+        "text": "Coral Coast Tours. The balance for your reef trip on 9 April is now due. Card number. Expiry. CVC. Pay $230.00."
+      }
+    },
+    {
+      "id": "dental-invoice",
+      "expected": "yes",
+      "input": {
+        "company": "Bayside Dental",
+        "domain": "baysidedental-billing.com",
+        "title": "Outstanding invoice",
+        "text": "Bayside Dental. You have an outstanding invoice for your check-up on 2 October. Card number. Expiry. CVC. Pay $95.00."
+      }
+    },
+    {
+      "id": "airline-baggage-provider",
+      "expected": "yes",
+      "input": {
+        "company": "Sunset Airlines",
+        "domain": "sunsetairlines-baggage.com",
+        "title": "Baggage fee",
+        "text": "Sunset Airlines. Pay the extra baggage fee for booking SA7Q2K. Powered by PayGate. Card number. Expiry. CVC. Pay $40.00."
+      }
+    },
+    {
+      "id": "courier-comparison",
+      "expected": "no",
+      "input": {
+        "company": "QuickShip Couriers",
+        "domain": "parcelhub.com.au",
+        "title": "ParcelHub checkout",
+        "text": "ParcelHub. You chose QuickShip Couriers for your parcel to Perth. ParcelHub books the courier and takes the payment. Card number. Expiry. CVC. Pay ParcelHub $14.60."
+      }
+    },
+    {
+      "id": "energy-switching-site",
+      "expected": "no",
+      "input": {
+        "company": "Metro Power",
+        "domain": "powercompare.com.au",
+        "title": "PowerCompare",
+        "text": "PowerCompare. Switch to Metro Power through PowerCompare. Pay a $20 refundable connection deposit to PowerCompare. Card number. Expiry. CVC. Pay deposit."
+      }
+    },
+    {
+      "id": "airline-travel-agent",
+      "expected": "no",
+      "input": {
+        "company": "Sunset Airlines",
+        "domain": "flyawaytravel.com.au",
+        "title": "FlyAway Travel – Payment",
+        "text": "FlyAway Travel. Flight: Sunset Airlines SA204, Brisbane to Cairns. FlyAway Travel takes the payment and issues your ticket. Card number. Expiry. CVC. Pay $289.00."
+      }
+    },
+    {
+      "id": "streaming-gift-card",
+      "expected": "no",
+      "input": {
+        "company": "BrightStream",
+        "domain": "giftworld.com.au",
+        "title": "GiftWorld checkout",
+        "text": "GiftWorld. BrightStream gift card, $50, sold by GiftWorld. Card number. Expiry. CVC. Buy now."
+      }
+    },
+    {
+      "id": "hotel-ota",
+      "expected": "no",
+      "input": {
+        "company": "Ocean View Hotel",
+        "domain": "roomradar.com",
+        "title": "RoomRadar – Book",
+        "text": "RoomRadar. Ocean View Hotel, 3 nights from 3 March. Pay RoomRadar now and the hotel will confirm your room. Card number. Expiry. CVC. Book."
+      }
+    },
+    {
+      "id": "insurance-broker",
+      "expected": "no",
+      "input": {
+        "company": "Summit Insurance",
+        "domain": "coversmart.com.au",
+        "title": "CoverSmart – Pay",
+        "text": "CoverSmart. Car insurance from Summit Insurance, arranged by CoverSmart. Pay CoverSmart for your first month. Card number. Expiry. CVC. Pay $78.00."
+      }
+    },
+    {
+      "id": "festival-ferry-mention",
+      "expected": "no",
+      "input": {
+        "company": "Harbour Ferries",
+        "domain": "harbourlights.com.au",
+        "title": "Harbour Lights Festival tickets",
+        "text": "Harbour Lights Festival. Evening pass $45. Get there with Harbour Ferries from Circular Quay. Card number. Expiry. CVC. Buy tickets."
+      }
+    },
+    {
+      "id": "plumber-water-mention",
+      "expected": "no",
+      "input": {
+        "company": "City Water",
+        "domain": "fixitplumbing.com.au",
+        "title": "FixIt Plumbing invoice",
+        "text": "FixIt Plumbing. Invoice for repairing the leak reported to City Water. Pay FixIt Plumbing. Card number. Expiry. CVC. Pay $260.00."
+      }
+    },
+    {
+      "id": "petstore-vet-mention",
+      "expected": "no",
+      "input": {
+        "company": "PetPal Vet",
+        "domain": "pawmart.com.au",
+        "title": "PawMart checkout",
+        "text": "PawMart. Flea treatment recommended by PetPal Vet, three-month pack. Card number. Expiry. CVC. Pay PawMart $54.00."
+      }
+    },
+    {
+      "id": "gym-class-booking-app",
+      "expected": "no",
+      "input": {
+        "company": "Northside Gym",
+        "domain": "fitfinder.com.au",
+        "title": "FitFinder",
+        "text": "FitFinder. Book a spin class at Northside Gym through FitFinder. FitFinder takes the payment. Card number. Expiry. CVC. Pay $22.00."
+      }
+    },
+    {
+      "id": "electronics-marketplace",
+      "expected": "no",
+      "input": {
+        "company": "TechZone",
+        "domain": "shopcentral.com.au",
+        "title": "ShopCentral checkout",
+        "text": "ShopCentral marketplace. Laptop sold by TechZone via ShopCentral. ShopCentral processes your payment. Card number. Expiry. CVC. Pay $1,299.00."
+      }
+    },
+    {
+      "id": "grocer-delivery-app",
+      "expected": "no",
+      "input": {
+        "company": "GreenLeaf Grocer",
+        "domain": "delivernow.com.au",
+        "title": "DeliverNow – Pay",
+        "text": "DeliverNow. Your order from GreenLeaf Grocer, delivered by DeliverNow. Pay DeliverNow. Card number. Expiry. CVC. Pay $67.30."
+      }
+    },
+    {
+      "id": "tour-review-site",
+      "expected": "no",
+      "input": {
+        "company": "Coral Coast Tours",
+        "domain": "tourtalk.com",
+        "title": "TourTalk – Book",
+        "text": "TourTalk. Coral Coast Tours reef trip, rated 4.8 by 1,204 travellers. Book and pay with TourTalk. Card number. Expiry. CVC. Book now."
+      }
+    },
+    {
+      "id": "dental-health-fund",
+      "expected": "no",
+      "input": {
+        "company": "Bayside Dental",
+        "domain": "healthplus.com.au",
+        "title": "HealthPlus – Gap payment",
+        "text": "HealthPlus health fund. Pay the gap for your Bayside Dental visit to HealthPlus. Card number. Expiry. CVC. Pay $35.00."
+      }
+    },
+    {
+      "id": "solar-energy-mention",
+      "expected": "no",
+      "input": {
+        "company": "Metro Power",
+        "domain": "sunroofsolar.com.au",
+        "title": "SunRoof Solar deposit",
+        "text": "SunRoof Solar. Feed-in tariff with Metro Power available. Pay your installation deposit to SunRoof Solar. Card number. Expiry. CVC. Pay $500.00."
+      }
+    }
+  ],
+  "articles": [
+    {
+      "id": "staynest-hacked",
+      "expected": "yes",
+      "input": {
+        "name": "StayNest",
+        "title": "Booking platform StayNest hacked, guest data stolen",
+        "sentences": [
+          "StayNest said attackers stole guest names and email addresses from its booking database last week."
+        ]
+      }
+    },
+    {
+      "id": "payflow-breach",
+      "expected": "yes",
+      "input": {
+        "name": "PayFlow",
+        "title": "PayFlow discloses data breach affecting merchants",
+        "sentences": [
+          "PayFlow told merchants that an unauthorised party accessed transaction records between 2 and 9 May."
+        ]
+      }
+    },
+    {
+      "id": "greenleaf-incident",
+      "expected": "yes",
+      "input": {
+        "name": "GreenLeaf Grocer",
+        "title": "GreenLeaf Grocer investigating cyber incident",
+        "sentences": [
+          "GreenLeaf Grocer confirmed a cyber incident has disrupted online orders in three states."
+        ]
+      }
+    },
+    {
+      "id": "summit-portal",
+      "expected": "yes",
+      "input": {
+        "name": "Summit Insurance",
+        "title": "Attackers compromised insurer's customer portal",
+        "sentences": [
+          "Attackers compromised Summit Insurance's customer portal and downloaded policy documents."
+        ]
+      }
+    },
+    {
+      "id": "bayside-leak-site",
+      "expected": "yes",
+      "input": {
+        "name": "Bayside Dental",
+        "title": "Patient files posted on leak site after ransomware attack",
+        "sentences": [
+          "A ransomware group posted files it says it took from Bayside Dental, including patient invoices."
+        ]
+      }
+    },
+    {
+      "id": "staynest-funding",
+      "expected": "no",
+      "input": {
+        "name": "StayNest",
+        "title": "StayNest raises $40 million to expand in Asia",
+        "sentences": [
+          "StayNest will use the funding to open offices in Singapore and Tokyo."
+        ]
+      }
+    },
+    {
+      "id": "payflow-not-impacted",
+      "expected": "no",
+      "input": {
+        "name": "PayFlow",
+        "title": "Card outage hits several payment providers",
+        "sentences": [
+          "PayFlow said it was not impacted by the outage and payments processed normally."
+        ]
+      }
+    },
+    {
+      "id": "greenleaf-stores",
+      "expected": "no",
+      "input": {
+        "name": "GreenLeaf Grocer",
+        "title": "GreenLeaf Grocer opens 20 new stores",
+        "sentences": [
+          "GreenLeaf Grocer said the new stores will create 600 jobs."
+        ]
+      }
+    },
+    {
+      "id": "summit-scam-calls",
+      "expected": "no",
+      "input": {
+        "name": "Summit Insurance",
+        "title": "Insurer warns customers about scam calls",
+        "sentences": [
+          "Summit Insurance said scammers are calling customers and pretending to be staff, but its systems were not breached."
+        ]
+      }
+    },
+    {
+      "id": "bayside-awareness",
+      "expected": "no",
+      "input": {
+        "name": "Bayside Dental",
+        "title": "Clinic sponsors cyber security awareness week",
+        "sentences": [
+          "Bayside Dental is sponsoring a cyber security awareness week for local small businesses."
+        ]
+      }
+    }
+  ]
+}

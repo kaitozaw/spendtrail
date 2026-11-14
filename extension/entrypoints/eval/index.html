@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spendtrail model evaluation</title>
+    <style>
+      body { margin: 0; font: 14px/1.5 system-ui, sans-serif; color: #0f172a; background: #f8fafc; }
+      main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+      h1 { font-size: 20px; margin: 0 0 4px; } h2 { font-size: 15px; margin: 0 0 10px; }
+      .muted { color: #64748b; }
+      .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-top: 16px; }
+      button { background: #4f46e5; color: #fff; border: 0; border-radius: 8px; padding: 8px 14px; font-weight: 600; cursor: pointer; margin: 0 8px 8px 0; }
+      button:disabled { opacity: .4; cursor: default; }
+      table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      th, td { text-align: left; padding: 6px 8px; border-top: 1px solid #e2e8f0; vertical-align: top; }
+      th { color: #64748b; font-weight: 600; }
+      .ok { color: #047857; font-weight: 600; } .ng { color: #b91c1c; font-weight: 600; }
+      .bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin: 6px 0; }
+      .bar > div { height: 100%; width: 0; background: #4f46e5; }
+      code { font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Spendtrail model evaluation</h1>
+      <p class="muted">Each candidate answers the two yes/no questions the agent asks: whether an article reports a breach, and whether a payment page presents itself as a company. The smallest model that answers every case correctly is used.</p>
+      <section class="card">
+        <h2>Candidates (smallest first)</h2>
+        <div id="buttons"></div>
+        <div class="bar"><div id="progress"></div></div>
+        <div id="status" class="muted">Pick a model, or run all. The first run of each model downloads it once.</div>
+      </section>
+      <section class="card">
+        <h2>Summary</h2>
+        <table>
+          <thead><tr><th>Model</th><th>Size (VRAM)</th><th>Load</th><th>Articles</th><th>Pages</th><th>Median per answer</th><th>Result</th></tr></thead>
+          <tbody id="summary"></tbody>
+        </table>
+      </section>
+      <section class="card">
+        <h2>Mistakes</h2>
+        <table>
+          <thead><tr><th>Model</th><th>Question</th><th>Case</th><th>Expected</th><th>Verdict</th><th>Model extracted</th></tr></thead>
+          <tbody id="mistakes"></tbody>
+        </table>
+      </section>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
