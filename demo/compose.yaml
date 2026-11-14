@@ -1,0 +1,9 @@
+# Demo environment: every folder in sites/ is served at <folder>.localhost on port 80.
+services:
+  sites:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./sites:/srv/sites:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro

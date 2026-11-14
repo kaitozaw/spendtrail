@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:site_name" content="Coastline Holiday Parks" />
+  <title>Complete your booking – Coastline Holiday Parks</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <img src="logo.svg" alt="Coastline Holiday Parks logo" class="logo" />
+    <span class="name">Coastline Holiday Parks</span>
+    <nav>Parks · Deals · My booking</nav>
+  </header>
+  <main>
+    <h1>Complete your booking</h1>
+    <p class="lede">Your cabin is held for 15 minutes.</p>
+    <div class="layout">
+      <div class="card">
+        <dl class="summary">
+          <dt>Stay</dt><dd>Ballina Beachfront Cabin</dd>
+          <dt>Dates</dt><dd>12–15 December 2026 (3 nights)</dd>
+          <dt>Guests</dt><dd>2 adults</dd>
+          <dt>Total</dt><dd>$486.00</dd>
+        </dl>
+        <iframe class="engine" src="http://bookings.rmscloud.localhost/widget.html?property=coastline-ballina" title="Booking engine"></iframe>
+      </div>
+      <form class="card" id="pay-form">
+        <label>Name on card <input name="cc-name" autocomplete="cc-name" required /></label>
+        <label>Card number <input name="cc-number" autocomplete="cc-number" inputmode="numeric" placeholder="4242 4242 4242 4242" required /></label>
+        <div class="row">
+          <label>Expiry <input name="cc-exp" autocomplete="cc-exp" placeholder="MM/YY" required /></label>
+          <label>CVC <input name="cc-csc" autocomplete="cc-csc" inputmode="numeric" required /></label>
+        </div>
+        <button class="button" type="submit">Pay $486.00</button>
+      </form>
+    </div>
+  </main>
+  <footer>Coastline Holiday Parks · Bookings powered by RMS Cloud</footer>
+  <script>
+    // Demo only: no card data is sent anywhere.
+    document.getElementById('pay-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      location.href = 'confirmed.html';
+    });
+  </script>
+</body>
+</html>

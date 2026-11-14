@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:site_name" content="StaySearch" />
+  <title>Checkout – StaySearch</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <img src="logo.svg" alt="StaySearch logo" class="logo" />
+    <span class="name">StaySearch</span>
+    <nav>Shop · Help · Account</nav>
+  </header>
+  <main>
+    <h1>Checkout</h1>
+    <p class="lede">Review your order and pay.</p>
+    <div class="layout">
+      <div class="card">
+        <dl class="summary">
+          <dt>Stay</dt><dd>Coastline Holiday Parks – Ballina Beachfront Cabin, 18–20 January 2027 (2 nights)</dd>
+          <dt>Total</dt><dd>$324.00</dd>
+        </dl>
+        <p class="note">StaySearch is a booking agent. Your stay is provided by Coastline Holiday Parks, and StaySearch takes the payment.</p>
+      </div>
+      <form class="card" id="pay-form">
+        <label>Name on card <input name="cc-name" autocomplete="cc-name" required /></label>
+        <label>Card number <input name="cc-number" autocomplete="cc-number" inputmode="numeric" placeholder="4242 4242 4242 4242" required /></label>
+        <div class="row">
+          <label>Expiry <input name="cc-exp" autocomplete="cc-exp" placeholder="MM/YY" required /></label>
+          <label>CVC <input name="cc-csc" autocomplete="cc-csc" inputmode="numeric" required /></label>
+        </div>
+        <button class="button" type="submit">Pay $324.00</button>
+      </form>
+    </div>
+  </main>
+  <script>
+    // Demo only: no card data is sent anywhere.
+    document.getElementById('pay-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      location.href = 'done.html';
+    });
+  </script>
+  <footer>StaySearch</footer>
+</body>
+</html>
