@@ -1,0 +1,13 @@
+{
+  "name": "spendtrail",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo": "docker compose -f demo/compose.yaml up",
+    "demo:down": "docker compose -f demo/compose.yaml down",
+    "logger": "node logger/view.mjs",
+    "logger:install": "node logger/install.mjs",
+    "ext:build": "npm run build --prefix extension",
+    "ext:dev": "npm run dev --prefix extension"
+  }
+}
