@@ -83,12 +83,12 @@ Cases are in [eval/cases.json](eval/cases.json) and [eval/holdout.json](eval/hol
 ## Layout
 
 ```
-plan/        Requirements, demonstration plan and design
+demo/        Docker Compose, demo sites, news feed, attack email
+eval/        Evaluation cases and the news rule runner
 extension/   Chrome extension (WXT, TypeScript)
   entrypoints/  background (service worker), content script, offscreen document (model), popup, eval page
   lib/          checks (L0–L3), news rules, names, map storage, model, alerts
   data/         known third-party systems, news feeds
 logger/      Native Messaging host and terminal viewer (with memory sampling)
-demo/        Docker Compose, demo sites, news feed, attack email
-eval/        Evaluation cases and the news rule runner
+plan/        Requirements, demonstration plan and design
 ```
