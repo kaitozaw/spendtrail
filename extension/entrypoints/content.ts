@@ -5,7 +5,16 @@ import type { PageOpened, PageOpenedReply, PaymentFieldReply, ToServiceWorker } 
 import { companyName, loadedHosts, logoHashes, pageSignals, paymentDetails, paymentFields } from '../lib/page';
 import { showAlert, showBanner } from '../lib/ui';
 
-const send = <T = unknown>(message: ToServiceWorker) => chrome.runtime.sendMessage(message) as Promise<T>;
+// Resolves to null when the extension was reloaded under this page ("Extension context invalidated"):
+// sendMessage then throws synchronously, so a .catch alone does not stop it.
+const send = async <T = unknown>(message: ToServiceWorker): Promise<T | null> => {
+  if (!chrome.runtime?.id) return null;
+  try {
+    return (await chrome.runtime.sendMessage(message)) as T;
+  } catch {
+    return null;
+  }
+};
 
 /** Holds the payment fields: they cannot be typed into while locked. */
 function lock(fields: HTMLInputElement[], locked: boolean) {
