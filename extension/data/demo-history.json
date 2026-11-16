@@ -1,0 +1,20 @@
+[
+  {
+    "company": "Qantas",
+    "domain": "qantas.com",
+    "systems": [{ "name": "Amadeus", "kind": "booking_system" }],
+    "logo_hashes": [],
+    "payment_details": [{ "reference": "7KQX2M", "dates": "1 December 2026", "place": "Brisbane to Sydney" }],
+    "first_paid_at": "2026-09-14T09:12:00.000Z",
+    "last_paid_at": "2026-09-14T09:12:00.000Z"
+  },
+  {
+    "company": "Booking.com",
+    "domain": "booking.com",
+    "systems": [],
+    "logo_hashes": [],
+    "payment_details": [{ "reference": "4127863905", "dates": "1–3 December 2026", "place": "Sydney" }],
+    "first_paid_at": "2026-10-02T11:40:00.000Z",
+    "last_paid_at": "2026-10-02T11:40:00.000Z"
+  }
+]

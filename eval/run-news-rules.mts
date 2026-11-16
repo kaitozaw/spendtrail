@@ -20,14 +20,18 @@ function evaluate(label: string, articles: Article[]) {
 evaluate('cases.json articles', load('./cases.json').articles);
 evaluate('holdout.json articles', load('./holdout.json').articles);
 
-// Demo feed: which articles would trigger for the names on Mia's map?
-const xml = readFileSync(new URL('../demo/sites/news/feed.xml', import.meta.url), 'utf8');
+// Demo feeds: which articles would trigger for the names on Kaito's map (the demo data)?
 const decode = (s: string) => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-const items = [...xml.matchAll(/<item>[\s\S]*?<title>([\s\S]*?)<\/title>[\s\S]*?<description>([\s\S]*?)<\/description>/g)].map((m) => ({
-  title: decode(m[1]!),
-  text: decode(m[2]!),
-}));
-const MAP_NAMES = ['Coastline Holiday Parks', 'Trailhead Outfitters', 'Harbour Books', 'RMS Cloud', 'Northpay'];
+const items = ['bleepingcomputer.xml', 'feed.xml'].flatMap((file) => {
+  const xml = readFileSync(new URL(`../demo/sites/news/${file}`, import.meta.url), 'utf8');
+  return [...xml.matchAll(/<item>[\s\S]*?<title>([\s\S]*?)<\/title>[\s\S]*?<description>([\s\S]*?)<\/description>/g)].map((m) => ({
+    title: decode(m[1]!),
+    text: decode(m[2]!),
+  }));
+});
+type DemoEntry = { company: string; systems: { name: string }[] };
+const demo: DemoEntry[] = JSON.parse(readFileSync(new URL('../extension/data/demo-history.json', import.meta.url), 'utf8'));
+const MAP_NAMES = [...new Set(demo.flatMap((e) => [e.company, ...e.systems.map((s) => s.name)]))];
 let named = 0;
 let reported = 0;
 for (const item of items) {

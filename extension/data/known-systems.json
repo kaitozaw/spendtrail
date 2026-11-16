@@ -1,9 +1,9 @@
 [
-  { "name": "RMS Cloud", "kind": "booking_system", "domain_patterns": ["rmscloud.com", "rmscloud.localhost"] },
+  { "name": "RMS Cloud", "kind": "booking_system", "domain_patterns": ["rmscloud.com"] },
   { "name": "Cloudbeds", "kind": "booking_system", "domain_patterns": ["cloudbeds.com"] },
   { "name": "SiteMinder", "kind": "booking_system", "domain_patterns": ["siteminder.com", "thebookingbutton.com"] },
+  { "name": "Amadeus", "kind": "booking_system", "domain_patterns": ["amadeus.com", "amadeus.net"] },
   { "name": "Mews", "kind": "booking_system", "domain_patterns": ["mews.com", "mews.li"] },
-  { "name": "Northpay", "kind": "payment_provider", "domain_patterns": ["northpay.localhost"] },
   { "name": "Stripe", "kind": "payment_provider", "domain_patterns": ["stripe.com", "stripe.network"] },
   { "name": "PayPal", "kind": "payment_provider", "domain_patterns": ["paypal.com", "paypalobjects.com"] },
   { "name": "Square", "kind": "payment_provider", "domain_patterns": ["squareup.com", "squarecdn.com"] },

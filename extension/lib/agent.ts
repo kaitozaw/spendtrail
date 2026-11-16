@@ -1,8 +1,10 @@
 // The agent's logic in the service worker: page checks (P3), recording payments (P1) and the log (P6).
+import demoHistory from '../data/demo-history.json';
 import { domainCheck, impersonationCheckRule, type Signal } from './checks';
 import { counters, logCounters } from './counters';
 import { log } from './log';
 import { nameMatches, possessive } from './names';
+import { mentions } from './news';
 import { checkNews, notificationText } from './newscheck';
 import type { OffscreenReply, PageOpenedReply, PaymentDetailsFound, PaymentField, PaymentFieldReply, PaymentSubmitted } from './messages';
 import { MODEL_ID, MODEL_NAME, MODEL_SIZE_MB } from './modelinfo';
@@ -51,7 +53,7 @@ const systemsText = (e: MapEntry) =>
 
 export async function logMap() {
   const [map, incidents] = await Promise.all([getMap(), getIncidents()]);
-  log('map', `Mia's map: ${map.length} ${map.length === 1 ? 'company' : 'companies'}`);
+  log('map', `Kaito's map: ${map.length} ${map.length === 1 ? 'company' : 'companies'}`);
   for (const e of map) {
     const incident = affectedBy(e, incidents);
     log('map', `  ${e.company.padEnd(26)}→ ${systemsText(e)}${incident ? `   [affected: ${incident.target} breach]` : ''}`);
@@ -126,7 +128,9 @@ export async function onPaymentField(message: PaymentField): Promise<PaymentFiel
 
 /** L3 impersonation_check_llm: the model names the business taking the payment; a rule decides. */
 async function impersonationCheckLlm(domain: string, signals: PageSignals, entry: MapEntry, incident: Incident): Promise<PaymentFieldReply> {
-  const input = { company: entry.company, domain, title: signals.title, text: signals.nearText };
+  // The name the site gives itself goes first, so the model also sees it when the form text names no business.
+  const text = signals.brand && !mentions(signals.brand, signals.nearText) ? `${signals.brand}\n${signals.nearText}` : signals.nearText;
+  const input = { company: entry.company, domain, title: signals.title, text };
   counters.model_calls++;
   counters.model_loaded = true;
   counters.model_size_mb = MODEL_SIZE_MB;
@@ -141,16 +145,27 @@ async function impersonationCheckLlm(domain: string, signals: PageSignals, entry
 
   let impersonation: boolean;
   if (reply.ok) {
-    impersonation = nameMatches(entry.company, reply.payee ?? '');
     step(
       'L3',
       `model named the business taking the payment: "${reply.payee}" (${Math.round(reply.answerMs ?? 0)} ms), model unloaded`,
     );
+    // Rule: the answer must be written on the page. A small model can copy a name from its worked examples.
+    let payee = reply.payee?.trim() || null;
+    if (payee && !mentions(payee, `${signals.title}\n${text}`)) {
+      step(
+        'L3',
+        `"${payee}" does not appear on the page → ${signals.brand ? `using the name the site gives itself, "${signals.brand}"` : 'no name to compare'}`,
+      );
+      payee = signals.brand;
+    }
+    impersonation = payee === null || nameMatches(entry.company, payee);
     step(
       'L3',
-      impersonation
-        ? `"${reply.payee}" is ${entry.company}, but ${domain} is not ${possessive(entry.company)} domain → impersonation → alert`
-        : `"${reply.payee}" is not ${entry.company} → not an impersonation → pass`,
+      payee === null
+        ? 'the business taking the payment is unknown → alert'
+        : impersonation
+          ? `"${payee}" is ${entry.company}, but ${domain} is not ${possessive(entry.company)} domain → impersonation → alert`
+          : `"${payee}" is not ${entry.company} → not an impersonation → pass`,
     );
   } else {
     impersonation = true; // a failure leads to a warning rather than a missed one
@@ -208,8 +223,23 @@ export async function onPaymentDetails(message: PaymentDetailsFound) {
   if (entry.payment_details.some(same)) return;
   entry.payment_details = [...entry.payment_details, details];
   await saveMapEntry(entry);
+  logDetails(entry.company, details);
+}
+
+function logDetails(company: string, details: PaymentDetailsFound['details']) {
   const parts = [details.reference && `reference ${details.reference}`, details.dates, details.place].filter(Boolean);
-  log('map', `  ${entry.company}: payment details ${parts.join(', ')}`);
+  log('map', `  ${company}: payment details ${parts.join(', ')}`);
+}
+
+/** For the demo: adds Kaito's earlier Qantas and Booking.com bookings, as P1 would record them after a payment. */
+export async function onFeedDemoData() {
+  for (const entry of demoHistory as MapEntry[]) {
+    await saveMapEntry(entry);
+    log('map', `added ${entry.company} (${entry.domain}) → ${systemsText(entry)}   [demo data]`);
+    for (const details of entry.payment_details) logDetails(entry.company, details);
+  }
+  clearResults();
+  await logMap();
 }
 
 /** P2 then P3 reset: check the news, and on a new incident notify the user and recheck every domain. */

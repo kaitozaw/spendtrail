@@ -66,7 +66,10 @@ export default defineContentScript({
       reported = true;
       observer.disconnect();
       lock(fields, true);
-      const verdict = await send<PaymentFieldReply>({ type: 'payment-field', domain, signals: await pageSignals(field) }).catch(
+      const signals = await pageSignals(field);
+      // For checking what L3 would read. Shown only in this page's DevTools console.
+      console.debug(`[Spendtrail] text near the payment field (${signals.nearText.length} chars):\n${signals.nearText}`);
+      const verdict = await send<PaymentFieldReply>({ type: 'payment-field', domain, signals }).catch(
         () => null,
       );
       if (verdict?.outcome !== 'alert' || !verdict.alert) return lock(fields, false);

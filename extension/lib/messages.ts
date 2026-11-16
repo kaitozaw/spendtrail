@@ -24,6 +24,8 @@ export type PaymentDetailsFound = { type: 'payment-details'; domain: string; det
 
 export type CheckNow = { type: 'check-now' };
 export type ClearData = { type: 'clear-data' };
+/** For the demo: adds Kaito's earlier Qantas and Booking.com bookings to the map, as P1 would record them after a payment. */
+export type FeedDemoData = { type: 'feed-demo-data' };
 
 export type ToServiceWorker =
   | PageOpened
@@ -32,7 +34,8 @@ export type ToServiceWorker =
   | PaymentSubmitted
   | PaymentDetailsFound
   | CheckNow
-  | ClearData;
+  | ClearData
+  | FeedDemoData;
 
 export type OffscreenPing = { target: 'offscreen'; type: 'ping' };
 /** Loads the model, extracts the business taking the payment, and unloads the model. */

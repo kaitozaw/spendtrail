@@ -2,6 +2,7 @@ import {
   logMap,
   onCheckNews,
   onClearData,
+  onFeedDemoData,
   onNoPaymentField,
   onPageOpened,
   onPaymentDetails,
@@ -10,6 +11,7 @@ import {
   prepareModel,
 } from '../lib/agent';
 import { logCounters } from '../lib/counters';
+import { siteOf } from '../lib/domain';
 import { log } from '../lib/log';
 import type { ToServiceWorker } from '../lib/messages';
 
@@ -29,7 +31,9 @@ export default defineBackground(() => {
     if (alarm.name === NEWS_ALARM) void onCheckNews('scheduled');
   });
 
-  chrome.runtime.onMessage.addListener((message: ToServiceWorker, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((received: ToServiceWorker, sender, sendResponse) => {
+    // Checks and the map work per site: www.qantas.com and book.qantas.com are both qantas.com.
+    const message = ('domain' in received ? { ...received, domain: siteOf(received.domain) } : received) as ToServiceWorker;
     const tabId = sender.tab?.id;
     switch (message.type) {
       case 'page-opened':
@@ -53,6 +57,9 @@ export default defineBackground(() => {
         break;
       case 'clear-data':
         void onClearData();
+        break;
+      case 'feed-demo-data':
+        void onFeedDemoData();
         break;
     }
     sendResponse(undefined);

@@ -23,12 +23,16 @@ export function companyName(): string {
   return siteName() ?? document.title.split(/[–|-]/).pop()!.trim();
 }
 
-/** Hosts of the iframes and scripts the page loads from other domains. */
+/** Hosts of everything the page loaded from other domains: iframes, scripts, images and requests. */
 export function loadedHosts(): string[] {
+  const urls = [
+    ...[...document.querySelectorAll<HTMLIFrameElement | HTMLScriptElement | HTMLImageElement>('iframe[src], script[src], img[src]')].map((el) => el.src),
+    ...performance.getEntriesByType('resource').map((e) => e.name),
+  ];
   const hosts = new Set<string>();
-  for (const el of document.querySelectorAll<HTMLIFrameElement | HTMLScriptElement>('iframe[src], script[src]')) {
+  for (const url of urls) {
     try {
-      const host = new URL(el.src, location.href).hostname;
+      const host = new URL(url, location.href).hostname;
       if (host && host !== location.hostname) hosts.add(host);
     } catch {
       /* ignore invalid URLs */
@@ -68,17 +72,64 @@ export async function logoHashes(): Promise<string[]> {
   return [...new Set(hashes.filter((h): h is string => !!h))];
 }
 
-/** Text around the payment form: the nearest container that holds the form and some context. */
+const NOT_TEXT = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'SELECT']);
+const NEAR_BEFORE = 600;
+const NEAR_AFTER = 900;
+
+/** Visible text of a node, without the options of drop-down lists (country codes, months). */
+function visibleText(node: Node): string {
+  if (node.nodeType === Node.TEXT_NODE) return (node.textContent ?? '').trim();
+  if (!(node instanceof HTMLElement) || NOT_TEXT.has(node.tagName)) return '';
+  // innerText of an element that is not rendered (a script, a closed dialog) is its raw text, so skip it.
+  // Wrappers with display: contents have no box but are rendered, so they are kept.
+  const display = getComputedStyle(node).display;
+  if (display === 'none' || (display !== 'contents' && node.getClientRects().length === 0)) return '';
+  const options = new Set([...node.querySelectorAll('option')].map((o) => (o.textContent ?? '').trim()));
+  return (node.innerText ?? '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l && !options.has(l))
+    .join('\n');
+}
+
+/**
+ * Text around the payment field: what comes just before it and just after it on the page.
+ * Measured from the field itself, because some checkouts wrap the whole page in one form.
+ */
 function nearText(field: HTMLElement): string {
-  let el: HTMLElement | null = field.closest('form') ?? field;
-  while (el && el.parentElement && (el.innerText ?? '').length < 400) el = el.parentElement;
-  return (el?.innerText ?? '').slice(0, 1500);
+  const before: string[] = [];
+  const after: string[] = [];
+  let node: Node = field;
+  while (node.parentNode && node !== document.body) {
+    const parent: Node = node.parentNode;
+    const b: string[] = [];
+    let seen = false;
+    for (const child of parent.childNodes) {
+      if (child === node) {
+        seen = true;
+        continue;
+      }
+      const text = visibleText(child);
+      if (text) (seen ? after : b).push(text);
+    }
+    before.unshift(...b);
+    node = parent;
+  }
+  return [before.join('\n').slice(-NEAR_BEFORE), after.join('\n').slice(0, NEAR_AFTER)].filter(Boolean).join('\n');
+}
+
+/** The name the site gives itself: og:site_name, otherwise the alt text of its logo ("expedia"). */
+function brand(): string | null {
+  const logo = [...document.querySelectorAll<HTMLImageElement>('img')].find((img) => /logo/i.test(`${img.src} ${img.alt} ${img.className}`));
+  const alt = logo?.alt.replace(/\blogo\b/gi, '').trim();
+  return siteName() ?? (alt || null);
 }
 
 export async function pageSignals(field: HTMLElement): Promise<PageSignals> {
   return {
     title: document.title,
     siteName: siteName(),
+    brand: brand(),
     nearText: nearText(field),
     pageText: document.body.innerText.slice(0, 8000),
     logoHashes: await logoHashes(),

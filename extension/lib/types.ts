@@ -36,6 +36,7 @@ export type CheckResult = {
 export type PageSignals = {
   title: string;
   siteName: string | null;
+  brand: string | null; // the name the site gives itself: og:site_name, otherwise its logo's alt text
   nearText: string; // text around the payment form
   pageText: string; // visible text of the page, truncated
   logoHashes: string[];

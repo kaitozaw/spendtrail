@@ -45,7 +45,8 @@ export function signalsFor(entry: MapEntry, page: PageSignals): Signal[] {
   const shortLines = page.nearText.split('\n').map((l) => l.trim()).filter((l) => l.length > 0 && l.length <= 60);
   const nameHit =
     [page.title, page.siteName ?? ''].some((t) => t && nameMatches(entry.company, t)) ||
-    mentions(entry.company, page.nearText) ||
+    // The whole page, not only the form: travel agents show the airline or hotel away from the card fields.
+    mentions(entry.company, page.pageText) ||
     shortLines.some((l) => nameMatches(entry.company, l, true));
   if (nameHit) found.push('name');
 

@@ -23,7 +23,7 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 │               ▼                                                           │
 │  Terminal logger: log, counters, memory                                   │
 │                                                                           │
-│  Docker: demo sites, mock third-party systems, demo news feed             │
+│  Docker: fake payment page, demo news feeds                               │
 └───────────────────────────────────────────────────────────────────────────┘
                │ public news feeds, the same for every user
                ▼
@@ -36,7 +36,7 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 - **Service worker:** runs the checks, keeps the map, incidents and check results, fetches the news on a schedule, counts model calls and personal data sent, and sends the log to the terminal logger.
 - **Offscreen document:** loads the model only when a check needs it, and unloads it after the answer.
 - **Terminal logger:** a Native Messaging host that Chrome starts, which appends each log line to a local file, and a viewer that prints the file in the terminal with the counters and Chrome's memory use.
-- **Demo environment:** Docker serves the demo sites, the mock third-party systems they load, and the demo news feed.
+- **Demo environment:** Docker serves the fake payment page used in the attack and the demo news feeds, which are snapshots of real articles. The other sites in the demo are real.
 
 ## Privacy boundary
 
@@ -68,6 +68,7 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 | Map entries | Extension | chrome.storage.local |
 | Known systems | `extension/data/known-systems.json` | Bundled with the extension |
 | News feeds | `extension/data/feeds.json` | Bundled with the extension |
+| Demo data (map entries) | `extension/data/demo-history.json` | Bundled with the extension |
 | Incidents | Extension | chrome.storage.local |
 | Check results | Extension | Memory |
 | Counters and log | Extension, terminal logger | Memory |
@@ -128,10 +129,12 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 
 - A payment is recorded when the user submits a form that contains a card or bank transfer field.
 - `company`: the page's `og:site_name`, otherwise its title.
-- `systems`: the domains of the iframes and scripts the page loads, matched against `domain_patterns` in known systems.
+- `domain`: the site the page belongs to, so `www.qantas.com` and `book.qantas.com` are both `qantas.com`. Every check compares domains in the same way.
+- `systems`: the domains of the iframes, scripts and images the page loads and of the requests it makes, matched against `domain_patterns` in known systems.
 - `logo_hashes`: a perceptual hash of each image in the page header whose source, alt text or class contains `logo`.
 - `payment_details`: read from the next page on the same domain, using labels such as "Booking reference", "Order number", dates and a place name.
 - If the domain is already on the map, the entry is updated at each payment: `systems` is replaced with the systems the page loads now, new `logo_hashes` and `payment_details` are added, and `last_paid_at` is set.
+- **Demo data:** **Feed demo data** on the toolbar menu adds the entries in `demo-history.json`, as this step would record them after a payment, because the demo makes no real payments.
 
 ## P2. Checking the news
 
@@ -164,7 +167,7 @@ A page presents itself as a company when any of these signals matches, fully or 
 
 | Signal | Match |
 |---|---|
-| Company name | The normalised name, or a close variant (small edit distance, look-alike characters), appears in the title, `og:site_name` or the text near the payment form |
+| Company name | The normalised name, or a close variant (small edit distance, look-alike characters), appears in the title or `og:site_name`, or the name appears anywhere in the page text |
 | Logo | A header image's perceptual hash is close to one of `logo_hashes` |
 | Payment details | A stored `reference` appears on the page, or a stored date and place both appear |
 
@@ -174,8 +177,9 @@ A page presents itself as a company when any of these signals matches, fully or 
 
 The model names the business taking the payment, and a rule makes the decision:
 
-1. **Extract (model):** the model reads the page title and the text near the payment form, and returns the name of the business taking the payment.
-2. **Decide (rules):** the page is an impersonation when that name matches the company. Names match when, after normalising, more than half of the company's distinctive words match (allowing small spelling differences and look-alike characters such as 0 for o), or when the names are the same once spaces and hyphens are removed. Generic words such as holiday, parks, shop and payments are ignored. The domain is already known not to be the company's, because L0 did not pass the page.
+1. **Extract (model):** the model reads the page title, the name the site gives itself (`og:site_name`, otherwise its logo's alt text) and the text just before and after the payment field (visible text only, without the options of drop-down lists), and returns the name of the business taking the payment.
+2. **Check the answer (rules):** the name must be written in the title or the text. Otherwise the model has made it up, and the name the site gives itself is used instead. If there is none, the page gets the alert.
+3. **Decide (rules):** the page is an impersonation when that name matches the company. Names match when, after normalising, more than half of the company's distinctive words match (allowing small spelling differences and look-alike characters such as 0 for o), or when the names are the same once spaces and hyphens are removed. Generic words such as holiday, parks, shop and payments are ignored. The domain is already known not to be the company's, because L0 did not pass the page.
 
 ## P4. Alerts
 
@@ -187,7 +191,7 @@ The model names the business taking the payment, and a rule makes the decision:
 - The model is used only by L3. The offscreen document loads it when L3 needs an answer, and unloads it straight after.
 - The prompt asks for the name of the business taking the payment, with four short worked examples that use businesses not found in the evaluation. The output is constrained to `{"payee": string}` of at most 60 characters.
 - If the model cannot load or answer, L3 shows the alert, so a failure leads to a warning rather than a missed one.
-- **Model selection:** each candidate (SmolLM2 135M and 360M, Llama 3.2 1B, Qwen2.5 0.5B and 1.5B) extracted the payee on 16 tuning cases and 30 held-out cases that were never used to tune the prompt. These cases cover impersonations, look-alike names, travel agents, marketplaces, resellers and review sites. The smallest model that got every case right is used. Asking the models yes/no questions directly gave results close to chance for every model under 1.5B, which is why the model extracts a name and a rule decides.
+- **Model selection:** each candidate (SmolLM2 135M and 360M, Llama 3.2 1B, Qwen2.5 0.5B and 1.5B) extracted the payee on 16 tuning cases and 30 held-out cases that were never used to tune the prompt. These cases cover impersonations, look-alike names, travel agents, marketplaces, resellers and review sites. The smallest model that got every case right is used. Two tuning cases from the demo pages (Expedia and the fake Qantas page) were added afterwards. Asking the models yes/no questions directly gave results close to chance for every model under 1.5B, which is why the model extracts a name and a rule decides.
 
 ## P6. Log and counters
 

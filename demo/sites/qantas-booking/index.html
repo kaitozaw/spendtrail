@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:site_name" content="Qantas" />
+  <title>Confirm your payment – Qantas</title>
+  <style>
+    :root { --brand: #e40000; --brand-dark: #b30000; --ink: #1f1f1f; --muted: #666; --line: #e5e5e5; --bg: #f5f5f5; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.5 system-ui, -apple-system, sans-serif; color: var(--ink); background: var(--bg); }
+    header { display: flex; align-items: center; gap: 24px; padding: 16px 32px; background: #fff; border-bottom: 1px solid var(--line); }
+    header .name { font-size: 22px; font-weight: 800; letter-spacing: .12em; color: var(--brand); }
+    header nav { margin-left: auto; font-size: 14px; color: var(--muted); }
+    main { max-width: 880px; margin: 0 auto; padding: 32px; }
+    h1 { font-size: 28px; margin: 0 0 12px; }
+    .warning { background: #fff1f1; border: 1px solid #ffc9c9; color: #9b0000; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 15px; }
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+    .summary dt { font-size: 13px; color: var(--muted); } .summary dd { margin: 0 0 12px; font-weight: 600; }
+    .ref { font: 700 22px ui-monospace, Menlo, monospace; color: var(--brand-dark); letter-spacing: .08em; }
+    form label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    form input { display: block; width: 100%; margin-top: 4px; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font: 15px system-ui, sans-serif; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .button { background: var(--brand); color: #fff; border: 0; border-radius: 8px; padding: 12px 18px; font: 600 15px system-ui, sans-serif; cursor: pointer; width: 100%; }
+    .button:hover { background: var(--brand-dark); }
+    footer { text-align: center; padding: 24px; font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <!-- Demo attack page for the local demo only: it imitates Qantas on another domain. No data is sent anywhere. -->
+  <header>
+    <span class="name">QANTAS</span>
+    <nav>Flights · Manage booking · Frequent Flyer</nav>
+  </header>
+  <main>
+    <h1>We could not confirm the payment for your booking</h1>
+    <div class="warning">Confirm your card within 24 hours or your seats will be released.</div>
+    <div class="layout">
+      <div class="card">
+        <dl class="summary">
+          <dt>Booking reference</dt><dd class="ref">7KQX2M</dd>
+          <dt>Passenger</dt><dd>Kaito Ozawa</dd>
+          <dt>Flight</dt><dd>Brisbane to Sydney</dd>
+          <dt>Date</dt><dd>1 December 2026</dd>
+          <dt>Amount due</dt><dd>AU$412.00</dd>
+        </dl>
+      </div>
+      <form class="card" id="pay-form">
+        <label>Name on card <input name="cc-name" autocomplete="cc-name" required /></label>
+        <label>Card number <input name="cc-number" autocomplete="cc-number" inputmode="numeric" placeholder="4242 4242 4242 4242" required /></label>
+        <div class="row">
+          <label>Expiry <input name="cc-exp" autocomplete="cc-exp" placeholder="MM/YY" required /></label>
+          <label>CVC <input name="cc-csc" autocomplete="cc-csc" inputmode="numeric" required /></label>
+        </div>
+        <button class="button" type="submit">Confirm payment</button>
+      </form>
+    </div>
+  </main>
+  <footer>Qantas · Secure payments</footer>
+  <script>
+    document.getElementById('pay-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.querySelector('main').innerHTML = '<h1>Payment confirmed</h1><p>Thank you. Your seats are confirmed.</p>';
+    });
+  </script>
+</body>
+</html>

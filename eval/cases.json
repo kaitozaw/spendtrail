@@ -197,6 +197,20 @@
           "Microsoft released fixes for 1,092 vulnerabilities across Windows, Office and Azure in its November update."
         ]
       }
+    },
+    {
+      "id": "amadeus-jal-breach",
+      "source": "real",
+      "expected": "yes",
+      "input": {
+        "name": "Amadeus",
+        "title": "Japan Airlines suffers third-party data breach exposing passenger info",
+        "sentences": [
+          "Japan Airlines (JAL) has announced that a data breach at Amadeus's Passenger Service System exposed the data of about 92,000 customers.",
+          "JAL Group, which operates the airlines JAL and Japan Transocean Air, uses the system to handle passenger reservations, ticketing, and check-in.",
+          "According to its announcement, Amadeus notified the airline on October 23, 2026, that unauthorized access to its systems occurred between August 10, 2023, and September 23, 2026."
+        ]
+      }
     }
   ],
   "pages": [
@@ -358,6 +372,27 @@
         "domain": "holidayhop.com.au",
         "title": "HolidayHop – Pay for your trip",
         "text": "HolidayHop. Trip summary: Coastline Holiday Parks Ballina, 3 nights, plus airport transfer. Pay HolidayHop today and we will confirm your booking with the park. Card number. Expiry. CVC. Pay $512.00."
+      }
+    },
+    {
+      "id": "fake-qantas-booking",
+      "expected": "yes",
+      "input": {
+        "company": "Qantas",
+        "domain": "qantas-booking.localhost",
+        "title": "Confirm your payment – Qantas",
+        "text": "QANTAS\nFlights · Manage booking · Frequent Flyer\nWe could not confirm the payment for your booking\nConfirm your card within 24 hours or your seats will be released.\nBooking reference\n7KQX2M\nPassenger\nKaito Ozawa\nFlight\nBrisbane to Sydney\nDate\n1 December 2026\nAmount due\nAU$412.00\nName on card\nCard number\nExpiry\nCVC\nConfirm payment\nQantas · Secure payments"
+      }
+    },
+    {
+      "id": "expedia-qantas-flight",
+      "source": "real",
+      "expected": "no",
+      "input": {
+        "company": "Qantas",
+        "domain": "expedia.com.au",
+        "title": "Expedia: Payment",
+        "text": "expedia\netails\nPrice details\nFlight\nAU$463.99\nBase fare\nAU$345.05\nAirline Taxes\nAU$118.94\nTotal (AUD)\nAU$463.99\nThis price may increase if you book later\nYou'll earn OneKeyCash for this trip.\nWho's flying?\n* Required\nNames must match government-issued photo ID\nSelect traveller *\nAlex Morgan\nTitle *\nTitle *\nGiven name *\nMiddle name\nSurname *\nDate of birth*\nDay\nYear\nPhone country/region *\nPhone country/region *\nPhone number *\nCheckboxGroupName-urn:expe:taxo:data-elements:travelers:trip-notification\nReceive text alerts about this trip (free of charge).\nFrequent flyer and emergency contact\nPayment details\nSave this card for future use\nBilling address\nCountry/Territory *\nCountry/Territory *\nAddress *\nAddress 2\nCity *\nCounty/State/Province *\nCounty/State/Province *\nPostal code *\nRules & restrictions\nIf you book a fare that allows changes, the airline may charge a change or cancel fee, plus any fare difference. Airlines set change and cancel policies and fee amounts. We may collect these change or cancel fees, which are then passed on to the airline.\nTickets are non-refundable and non-transferable. A fee of AU$121 per ticket is charged for itinerary changes. Name changes are not allowed.\nYou may be entitled to a refund under applicable consumer laws.\nA change fee of AU$121 per ticket is charged by the airline for all itinerary changes.\nPlease read the complete penalty rules for changes and cancellations or charter contract.\nPlease read important information regarding the airline’s conditions"
       }
     }
   ]
