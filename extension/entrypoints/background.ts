@@ -10,7 +10,6 @@ import {
   onPaymentSubmitted,
   prepareModel,
 } from '../lib/agent';
-import { logCounters } from '../lib/counters';
 import { siteOf } from '../lib/domain';
 import { log } from '../lib/log';
 import type { ToServiceWorker } from '../lib/messages';
@@ -20,7 +19,7 @@ const NEWS_PERIOD_MINUTES = 6 * 60;
 
 export default defineBackground(() => {
   log('agent', 'Spendtrail agent started. Runs on this device; nothing about you leaves it.');
-  void logMap().then(logCounters);
+  void logMap();
   void prepareModel();
 
   // P2: check the news every 6 hours, and when the user clicks Check now.

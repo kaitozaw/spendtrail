@@ -1,9 +1,8 @@
 // The agent's logic in the service worker: page checks (P3), recording payments (P1) and the log (P6).
 import demoHistory from '../data/demo-history.json';
 import { domainCheck, impersonationCheckRule, type Signal } from './checks';
-import { counters, logCounters } from './counters';
 import { log } from './log';
-import { nameMatches, possessive } from './names';
+import { nameMatches } from './names';
 import { mentions } from './news';
 import { checkNews, notificationText } from './newscheck';
 import type { OffscreenReply, PageOpenedReply, PaymentDetailsFound, PaymentField, PaymentFieldReply, PaymentSubmitted } from './messages';
@@ -30,13 +29,13 @@ const loggedNoField = new Set<string>();
 const banners = new Map<string, BannerInfo>();
 const alerts = new Map<string, AlertInfo>();
 
+// The terminal logger prints the level name on one line and the result on the next.
 function step(level: Level, text: string) {
-  log('check', `  ${LEVEL_NAME[level].padEnd(30)}${text}`);
+  log('check', text, { level, name: LEVEL_NAME[level] });
 }
 
 function finish(domain: string, level: Level, outcome: Outcome, company: string | null) {
   results.set(domain, { domain, ended_at: level, outcome, company, checked_at: new Date().toISOString() });
-  logCounters();
 }
 
 /** Called when a new breach is detected: every domain is checked again. */
@@ -73,12 +72,12 @@ export async function onPageOpened(tabId: number, domain: string): Promise<PageO
   log('page', `▶ ${domain}`);
   const l0 = domainCheck(domain, await getMap(), await getIncidents());
   if (l0.outcome === 'pass') {
-    step('L0', `in transaction history (${l0.entry.company}), not affected → pass`);
+    step('L0', `${l0.entry.company} → pass`);
     finish(domain, 'L0', 'pass', l0.entry.company);
     return { watch: false, capture };
   }
   if (l0.outcome === 'pass_with_alert') {
-    step('L0', `in transaction history (${l0.entry.company}), affected by ${l0.incident.target} breach → pass with alert`);
+    step('L0', `${l0.entry.company}, ${l0.incident.target} breached → pass + banner`);
     finish(domain, 'L0', 'pass_with_alert', l0.entry.company);
     const system = l0.entry.systems.find((s) => s.name === l0.incident.target);
     const banner: BannerInfo = {
@@ -89,7 +88,7 @@ export async function onPageOpened(tabId: number, domain: string): Promise<PageO
       date: new Date(l0.incident.article.published_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
     };
     banners.set(domain, banner);
-    log('alert', `  banner shown on ${domain}: ${possessive(banner.company)} ${banner.via ?? 'company'} ${banner.target} was breached`);
+    log('alert', `banner on ${domain}: ${banner.target} breached`);
     return { watch: false, capture, banner };
   }
   results.delete(domain);
@@ -100,8 +99,7 @@ export async function onPageOpened(tabId: number, domain: string): Promise<PageO
 export function onNoPaymentField(domain: string) {
   if (loggedNoField.has(domain)) return;
   loggedNoField.add(domain);
-  step('L1', 'no card or bank transfer field → pass');
-  logCounters();
+  step('L1', 'no payment field → pass');
 }
 
 /** L1 found a payment field: run L2, and L3 when L2 asks for it. */
@@ -109,20 +107,20 @@ export async function onPaymentField(message: PaymentField): Promise<PaymentFiel
   const { domain, signals } = message;
   const known = results.get(domain);
   if (known) return { outcome: known.outcome === 'alert' ? 'alert' : 'pass', alert: alerts.get(domain) };
-  step('L1', 'card or bank transfer field found → L2');
+  step('L1', 'payment field → L2');
   const l2 = impersonationCheckRule(signals, await getMap(), await getIncidents());
   const via = (s: Signal[]) => s.join(', ');
   if (l2.outcome === 'pass' && l2.reason === 'no company in the transaction history') {
-    step('L2', 'does not present itself as a company in the transaction history → pass');
+    step('L2', 'no known company → pass');
     finish(domain, 'L2', 'pass', null);
     return { outcome: 'pass' };
   }
   if (l2.outcome === 'pass') {
-    step('L2', `presents itself as ${l2.entry.company} (${via(l2.signals)}), not affected → pass`);
+    step('L2', `looks like ${l2.entry.company} (${via(l2.signals)}) → pass`);
     finish(domain, 'L2', 'pass', l2.entry.company);
     return { outcome: 'pass' };
   }
-  step('L2', `presents itself as ${l2.entry.company} (${via(l2.signals)}), affected by ${l2.incident.target} breach → L3`);
+  step('L2', `looks like ${l2.entry.company} (${via(l2.signals)}), ${l2.incident.target} breached → L3`);
   return impersonationCheckLlm(domain, signals, l2.entry, l2.incident);
 }
 
@@ -131,45 +129,31 @@ async function impersonationCheckLlm(domain: string, signals: PageSignals, entry
   // The name the site gives itself goes first, so the model also sees it when the form text names no business.
   const text = signals.brand && !mentions(signals.brand, signals.nearText) ? `${signals.brand}\n${signals.nearText}` : signals.nearText;
   const input = { company: entry.company, domain, title: signals.title, text };
-  counters.model_calls++;
-  counters.model_loaded = true;
-  counters.model_size_mb = MODEL_SIZE_MB;
-  step('L3', `loading ${MODEL_NAME} (${MODEL_SIZE_MB} MB) to read the payment form…`);
   let reply: OffscreenReply;
   try {
     reply = await askOffscreen<OffscreenReply>({ target: 'offscreen', type: 'extract-payee', modelId: MODEL_ID, input });
   } catch (e) {
     reply = { ok: false, error: (e as Error).message };
   }
-  counters.model_loaded = false;
 
   let impersonation: boolean;
   if (reply.ok) {
-    step(
-      'L3',
-      `model named the business taking the payment: "${reply.payee}" (${Math.round(reply.answerMs ?? 0)} ms), model unloaded`,
-    );
     // Rule: the answer must be written on the page. A small model can copy a name from its worked examples.
     let payee = reply.payee?.trim() || null;
-    if (payee && !mentions(payee, `${signals.title}\n${text}`)) {
-      step(
-        'L3',
-        `"${payee}" does not appear on the page → ${signals.brand ? `using the name the site gives itself, "${signals.brand}"` : 'no name to compare'}`,
-      );
-      payee = signals.brand;
-    }
+    if (payee && !mentions(payee, `${signals.title}\n${text}`)) payee = signals.brand;
     impersonation = payee === null || nameMatches(entry.company, payee);
     step(
       'L3',
       payee === null
-        ? 'the business taking the payment is unknown → alert'
+        ? 'payee unknown → alert'
         : impersonation
-          ? `"${payee}" is ${entry.company}, but ${domain} is not ${possessive(entry.company)} domain → impersonation → alert`
-          : `"${payee}" is not ${entry.company} → not an impersonation → pass`,
+          ? `${entry.company} on non-${entry.company} domain → alert`
+          : `${payee} ≠ ${entry.company} → pass`,
     );
   } else {
     impersonation = true; // a failure leads to a warning rather than a missed one
-    step('L3', `model unavailable (${reply.error}) → alert`);
+    console.warn('[spendtrail] model unavailable:', reply.error);
+    step('L3', 'model unavailable → alert');
   }
 
   if (!impersonation) {
@@ -190,7 +174,7 @@ async function impersonationCheckLlm(domain: string, signals: PageSignals, entry
     pageDomain: domain,
   };
   alerts.set(domain, alert);
-  log('alert', `  alert shown on ${domain}: payment form held`);
+  log('alert', `form held on ${domain}`);
   finish(domain, 'L3', 'alert', entry.company);
   return { outcome: 'alert', alert };
 }
@@ -257,7 +241,7 @@ export async function onCheckNews(trigger: string) {
         message,
         priority: 2,
       });
-      log('alert', `  notification: ${title}`);
+      log('news', `  notification: ${title}`);
     }
   }
   await logMap();
@@ -277,8 +261,6 @@ export async function prepareModel() {
 export async function onClearData() {
   await clearAll();
   clearResults();
-  counters.model_calls = 0;
-  counters.personal_data_sent_bytes = 0;
   log('agent', 'agent data cleared');
   await logMap();
 }

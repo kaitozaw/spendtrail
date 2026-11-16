@@ -1,6 +1,6 @@
 // Builds the demo news feeds (RSS 2.0) from real articles, served as fixed snapshots at news.localhost:
 // - bleepingcomputer.xml: BleepingComputer security news around the Amadeus article (27–31 October 2026)
-// - feed.xml: Cyber Daily articles around the RMS Cloud article (Cyber Daily publishes no RSS feed)
+// - cyberdaily.xml: Cyber Daily articles around the RMS Cloud article (Cyber Daily publishes no RSS feed)
 // Run: node demo/scripts/build-feed.mjs [bleepingcomputer|cyberdaily]   (both when omitted; slow on purpose)
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -130,7 +130,7 @@ async function cyberDaily() {
   }
   process.stdout.write('\n');
   if (!articles.some((a) => a.id === RMS_ID)) throw new Error('RMS Cloud article missing from the feed');
-  writeFeed('feed.xml', 'Cyber Daily', 'https://www.cyberdaily.au/security', articles);
+  writeFeed('cyberdaily.xml', 'Cyber Daily', 'https://www.cyberdaily.au/security', articles);
 }
 
 const only = process.argv[2];

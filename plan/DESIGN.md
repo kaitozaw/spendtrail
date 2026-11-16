@@ -21,7 +21,7 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 │  └────────────┬───────────────────────────────────────────┘               │
 │               │ Native Messaging (local, no network)                      │
 │               ▼                                                           │
-│  Terminal logger: log, counters, memory                                   │
+│  Terminal logger: log                                                     │
 │                                                                           │
 │  Docker: fake payment page, demo news feeds                               │
 └───────────────────────────────────────────────────────────────────────────┘
@@ -33,9 +33,9 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 ## Components
 
 - **Content script:** runs on every page. It reports the domain when the user opens a page, watches the page for payment fields, collects the signals used by the checks, and shows alerts.
-- **Service worker:** runs the checks, keeps the map, incidents and check results, fetches the news on a schedule, counts model calls and personal data sent, and sends the log to the terminal logger.
+- **Service worker:** runs the checks, keeps the map, incidents and check results, fetches the news on a schedule, and sends the log to the terminal logger.
 - **Offscreen document:** loads the model only when a check needs it, and unloads it after the answer.
-- **Terminal logger:** a Native Messaging host that Chrome starts, which appends each log line to a local file, and a viewer that prints the file in the terminal with the counters and Chrome's memory use.
+- **Terminal logger:** a Native Messaging host that Chrome starts, which appends each log line to a local file, and a viewer that prints the file in the terminal.
 - **Demo environment:** Docker serves the fake payment page used in the attack and the demo news feeds, which are snapshots of real articles. The other sites in the demo are real.
 
 ## Privacy boundary
@@ -43,7 +43,6 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 - News feeds are fetched whole, with no query that depends on the map, so every user sends the same request.
 - The model is downloaded once and runs in the browser.
 - The map, incidents, check results and page content never leave the device.
-- The personal data counter adds up the size of every request body and query string the extension sends. It stays at 0 because no request carries user data.
 
 # Tech stack
 
@@ -71,7 +70,7 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 | Demo data (map entries) | `extension/data/demo-history.json` | Bundled with the extension |
 | Incidents | Extension | chrome.storage.local |
 | Check results | Extension | Memory |
-| Counters and log | Extension, terminal logger | Memory |
+| Log | Extension, terminal logger | Memory |
 
 ## Schemas
 
@@ -112,16 +111,6 @@ Spendtrail is a Chrome extension that runs entirely on the user's computer. The 
 | `outcome` | `pass` \| `pass_with_alert` \| `alert` |
 | `company` | string \| null (the company the page presents itself as) |
 | `checked_at` | datetime |
-
-**Counters**
-
-| Field | Type |
-|---|---|
-| `model_calls` | integer |
-| `personal_data_sent_bytes` | integer |
-| `model_loaded` | boolean |
-| `model_size_mb` | number |
-| `chrome_memory_mb` | number (sampled by the terminal logger) |
 
 # Logic
 
@@ -193,8 +182,7 @@ The model names the business taking the payment, and a rule makes the decision:
 - If the model cannot load or answer, L3 shows the alert, so a failure leads to a warning rather than a missed one.
 - **Model selection:** each candidate (SmolLM2 135M and 360M, Llama 3.2 1B, Qwen2.5 0.5B and 1.5B) extracted the payee on 16 tuning cases and 30 held-out cases that were never used to tune the prompt. These cases cover impersonations, look-alike names, travel agents, marketplaces, resellers and review sites. The smallest model that got every case right is used. Two tuning cases from the demo pages (Expedia and the fake Qantas page) were added afterwards. Asking the models yes/no questions directly gave results close to chance for every model under 1.5B, which is why the model extracts a name and a rule decides.
 
-## P6. Log and counters
+## P6. Log
 
-- The service worker sends each check, each news step and each model call to the terminal logger as one line.
-- The extension reports `model_calls`, `personal_data_sent_bytes`, `model_loaded` and `model_size_mb`.
-- The terminal logger samples the memory of the user's Chrome every second, and every 200 ms while the model runs, using macOS `footprint` (the same measure as Activity Monitor, including graphics memory). It reports the extension processes and the GPU process, where WebGPU holds the model, and prints these figures under each counters line, with the GPU peak while the model ran.
+- The service worker sends each check, each news step and each alert to the terminal logger as one line. The terminal shows the checks and their alerts; the map and the news check are shown in DevTools.
+- The viewer prints each check as the level name, in a colour for each level, followed by its result on the next line. L3 shows only its result, not the model's steps.

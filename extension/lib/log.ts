@@ -3,7 +3,7 @@
 
 export const NATIVE_HOST = 'com.spendtrail.logger';
 
-export type LogKind = 'agent' | 'page' | 'check' | 'news' | 'model' | 'map' | 'alert' | 'counters';
+export type LogKind = 'agent' | 'page' | 'check' | 'news' | 'model' | 'map' | 'alert';
 export type LogLine = { time: string; kind: LogKind; text: string; data?: unknown };
 
 let port: chrome.runtime.Port | null = null;

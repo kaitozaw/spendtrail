@@ -12,15 +12,15 @@ The moment the audience should remember: every page passes through the same chec
 
 The demo runs on one computer, in one Chrome window with the Spendtrail extension installed:
 
-- **Left, Chrome:** the demo sites, the Gmail inbox and the agent's alerts. The extension shows nothing else in the browser apart from its toolbar icon. The extension's DevTools, docked in the same window, shows the map and incidents as stored on the device (Application → Extension storage).
-- **Top right, terminal:** the agent's log, passed from the extension to a local process through Chrome Native Messaging, not over the network. It shows the map, each check and the level at which it ended, the news checks, and three counters: model calls, personal data sent and the extension's memory use.
-- **Bottom right, Chrome Task Manager:** the extension's memory and CPU, as Chrome reports them.
+- **Left, Chrome:** the demo sites, the Gmail inbox and the agent's alerts. The extension shows nothing else in the browser apart from its toolbar icon.
+- **Right, terminal:** the agent's log, passed from the extension to a local process through Chrome Native Messaging, not over the network. It shows each check and the level at which it ended.
+- **Separate screen, DevTools:** the extension's DevTools shows the map and incidents as stored on the device (Application → Extension storage).
 
 ## Cast and setup
 
 The breach, the article, Qantas, Booking.com and Expedia are real. Kaito's Qantas and Booking.com bookings are demo data, and the fake payment page is fictional and served locally with Docker.
 
-- **Kaito:** the user. Kaito's Gmail account (kaitozaw@gmail.com) receives the attack email, which is sent from a separate demo account.
+- **Kaito:** the user. Kaito's Gmail account receives the attack email, which is sent from a separate demo account.
 
 | Site | Domain | Role | Third-party system behind it |
 |---|---|---|---|
@@ -29,9 +29,7 @@ The breach, the article, Qantas, Booking.com and Expedia are real. Kaito's Qanta
 | Expedia | `www.expedia.com.au` | Travel agent that sells Qantas flights | Its own checkout |
 | Fake Qantas payment page | `qantas-booking.localhost` | Page used in the attack, quoting Kaito's booking reference | None |
 
-At the start, the map is empty. Because the demo makes no real payments, Kaito's earlier Qantas and Booking.com bookings are added in Scene 1 from the extension's menu, as the map would record them after a payment.
-
-The narration introduces Qantas and Booking.com as the companies Kaito pays, and every other site as one Kaito has never used. Domains are shown only in the terminal and are not read out.
+At the start, the map is empty. Because the demo makes no real payments, Kaito's earlier Qantas and Booking.com bookings are added in Scene 1 from the extension's menu.
 
 ### Article
 
@@ -68,7 +66,7 @@ The agent fetches public news feeds and keeps only the articles in which a sente
 ### Scene 1: Before the breach (about 70 seconds)
 
 1. **Add Kaito's payment history**
-   - **On screen:** the terminal adds Qantas to the map with Amadeus as its booking system, and Booking.com with no known systems. DevTools shows the stored map entries: each company, its domain, its systems, and the booking reference, dates and place of Kaito's booking.
+   - **On screen:** DevTools shows the stored map entries: Qantas with Amadeus as its booking system, Booking.com with no known systems, and for each the domain and the booking reference, dates and place of Kaito's booking.
    - **Do:** click **Feed demo data** on the extension's toolbar menu, then refresh Extension storage in DevTools.
 2. **L0 `domain_check`: pass**
    - **On screen:** Qantas's home page. The terminal shows the check ending at L0, with no alert.
@@ -77,24 +75,26 @@ The agent fetches public news feeds and keeps only the articles in which a sente
    - **On screen:** Booking.com's home page. The terminal shows the check ending at L0, with no alert.
    - **Do:** open Booking.com from a bookmark.
 
-The model call counter is still 0.
-
 ### Scene 2: Breach detected (about 60 seconds)
 
-1. **Check the news**
-   - **On screen:** the terminal shows the articles checked and the one article that names Amadeus from the map. The rules confirm that the article reports a breach of Amadeus, and the model call counter stays at 0. Qantas is marked as affected through its booking system, Booking.com is not, and Chrome shows a notification that messages quoting the Qantas booking may follow. DevTools shows the stored incident: Amadeus, the article and when it was detected.
+1. **Show the news feed**
+   - **On screen:** the BleepingComputer feed that the agent reads, a list of security articles, and among them the article "Japan Airlines suffers third-party data breach exposing passenger info", which names Amadeus as the breached booking system.
+   - **Do:** open http://news.localhost/bleepingcomputer.xml, then open https://www.bleepingcomputer.com/news/security/japan-airlines-suffers-third-party-data-breach-exposing-passenger-info/.
+2. **Check the news**
+   - **On screen:** the rules find the one article that reports a breach of Amadeus, a system on the map. Qantas is marked as affected through its booking system, Booking.com is not, and Chrome shows a notification that messages quoting the Qantas booking may follow. DevTools shows the stored incident: Amadeus, the article and when it was detected.
    - **Do:** click **Check now** on the extension's toolbar menu, then refresh Extension storage in DevTools.
 
 ### Scene 3: After the breach (about 120 seconds)
 
-1. **L0 `domain_check`: pass, with an alert**
+1. **L0 `domain_check`: pass**
+   - **On screen:** Booking.com's home page. The check ends at L0 with no alert, because Booking.com is not affected by the Amadeus breach.
+   - **Do:** open Booking.com from a bookmark.
+2. **L0 `domain_check`: pass, with an alert**
    - **On screen:** Qantas's home page. The check ends at L0, and an alert explains that Qantas's booking system, Amadeus, has been breached, that payments on this site are fine, and that messages asking for payment should be checked.
    - **Do:** open Qantas's site from a bookmark.
-2. **L3 `impersonation_check_llm`: pass**
-   - **On screen:** Expedia's checkout for a Qantas flight. L2 sends the page to L3 because it names Qantas. The model names Expedia as the business taking the payment, the rule finds that this is not Qantas, and the model call counter becomes 1. The payment form stays open.
+3. **L3 `impersonation_check_llm`: pass**
+   - **On screen:** Expedia's checkout for a Qantas flight. L2 sends the page to L3 because it names Qantas. The model names Expedia as the business taking the payment, and the rule finds that this is not Qantas. The payment form stays open.
    - **Do:** choose a Qantas flight on Expedia and go to the payment step, without paying.
-3. **L3 `impersonation_check_llm`: alert**
-   - **On screen:** Kaito's Gmail inbox: "We could not confirm the payment for your Qantas booking. Confirm your card within 24 hours or your seats will be released." The email quotes Kaito's booking reference and flight. The link opens the fake Qantas payment page. When the card field is selected, the model names Qantas as the business taking the payment on a domain that is not Qantas's, the rule marks the page as an impersonation, and the model call counter becomes 2. The alert holds the form and shows the chain: Qantas, its booking system Amadeus, the breach article, and this page's domain, which is not Qantas's. It also says what to do next: go to Qantas from a bookmark, check with Qantas through its official contact details, and contact the card issuer if card details have already been entered.
+4. **L3 `impersonation_check_llm`: alert**
+   - **On screen:** Kaito's Gmail inbox: "We could not confirm the payment for your Qantas booking. Confirm your card within 24 hours or your seats will be released." The email quotes Kaito's booking reference and flight. The link opens the fake Qantas payment page. When the card field is selected, the model names Qantas as the business taking the payment on a domain that is not Qantas's, and the rule marks the page as an impersonation. The alert holds the form and shows the chain: Qantas, its booking system Amadeus, the breach article, and this page's domain, which is not Qantas's. It also says what to do next: go to Qantas from a bookmark, check with Qantas through its official contact details, and contact the card issuer if card details have already been entered.
    - **Do:** open the email, click the link, then click the card number field.
-
-At the end, the terminal shows 2 model calls and 0 bytes of personal data sent. Throughout the demo, its memory figure and Chrome Task Manager show that the extension stays small, and that its memory use rises only while the model answers and falls back when the model is unloaded.

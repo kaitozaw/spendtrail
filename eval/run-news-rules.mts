@@ -22,7 +22,7 @@ evaluate('holdout.json articles', load('./holdout.json').articles);
 
 // Demo feeds: which articles would trigger for the names on Kaito's map (the demo data)?
 const decode = (s: string) => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-const items = ['bleepingcomputer.xml', 'feed.xml'].flatMap((file) => {
+const items = ['bleepingcomputer.xml', 'cyberdaily.xml'].flatMap((file) => {
   const xml = readFileSync(new URL(`../demo/sites/news/${file}`, import.meta.url), 'utf8');
   return [...xml.matchAll(/<item>[\s\S]*?<title>([\s\S]*?)<\/title>[\s\S]*?<description>([\s\S]*?)<\/description>/g)].map((m) => ({
     title: decode(m[1]!),

@@ -1,7 +1,6 @@
 // P2: checks public news feeds against the map. Rules only, no model.
 // Feeds are fetched whole, with no query that depends on the map, so every user sends the same request.
 import feeds from '../data/feeds.json';
-import { logCounters, trackedFetch } from './counters';
 import { log } from './log';
 import { possessive } from './names';
 import { mentions, reportsBreach } from './news';
@@ -42,7 +41,7 @@ export async function checkNews(trigger: string): Promise<NewIncident[]> {
   const items: FeedItem[] = [];
   for (const url of feeds as string[]) {
     try {
-      const res = await trackedFetch(url);
+      const res = await fetch(url);
       items.push(...parseRss(await res.text()));
     } catch (e) {
       log('news', `  could not fetch ${url}: ${(e as Error).message}`);
@@ -78,14 +77,12 @@ export async function checkNews(trigger: string): Promise<NewIncident[]> {
     await addIncident(incident);
     const affected = map.filter((e) => affectedBy(e, [incident]));
     created.push({ incident, affected });
-    log('alert', `incident: ${name} breached (${item.source}, ${shortDate(item.published)})`);
+    log('news', `incident: ${name} breached (${item.source}, ${shortDate(item.published)})`);
     for (const e of affected) {
-      log('alert', `  affected: ${e.company}${e.company === name ? '' : ` (its ${e.systems.find((s) => s.name === name)?.kind.replace('_', ' ') ?? 'system'} is ${name})`}`);
+      log('news', `  affected: ${e.company}${e.company === name ? '' : ` (its ${e.systems.find((s) => s.name === name)?.kind.replace('_', ' ') ?? 'system'} is ${name})`}`);
     }
   }
   if (created.length === 0) log('news', '  no new incidents');
-  log('news', `  model calls for the news check: 0`);
-  logCounters();
   return created;
 }
 

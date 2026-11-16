@@ -5,4 +5,4 @@ dist/
 .DS_Store
 
 # Snapshot of third-party articles: build it locally with node demo/scripts/build-feed.mjs
-demo/sites/news/feed.xml
+demo/sites/news/cyberdaily.xml
