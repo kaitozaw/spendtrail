@@ -1,5 +1,5 @@
 // The rule-based checks L0 and L2 (DESIGN.md, P3). Pure functions: no storage, no messaging.
-import { nameMatches, normaliseName } from './names';
+import { nameMatches, normaliseDetail } from './names';
 import { mentions } from './news';
 import { affectedBy } from './storage';
 import type { Incident, MapEntry, PageSignals } from './types';
@@ -51,8 +51,9 @@ export function signalsFor(entry: MapEntry, page: PageSignals): Signal[] {
 
   if (page.logoHashes.some((h) => entry.logo_hashes.some((k) => hamming(h, k) <= LOGO_DISTANCE))) found.push('logo');
 
-  const text = normaliseName(page.pageText);
-  const has = (s: string | null) => !!s && text.includes(normaliseName(s));
+  // Whole words only, and digits kept: "HB-48213" must not match "HB-48813".
+  const text = ` ${normaliseDetail(page.pageText)} `;
+  const has = (s: string | null) => !!s && normaliseDetail(s).length > 0 && text.includes(` ${normaliseDetail(s)} `);
   if (entry.payment_details.some((d) => has(d.reference) || (has(d.dates) && has(d.place)))) found.push('payment details');
 
   return found;

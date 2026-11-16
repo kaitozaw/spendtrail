@@ -20,6 +20,16 @@ export function normaliseName(name: string): string {
     .trim();
 }
 
+/** For payment details: keeps digits, which carry the reference and the dates. */
+export function normaliseDetail(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function significantTokens(name: string): string[] {
   return normaliseName(name)
     .split(' ')
